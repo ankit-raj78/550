@@ -109,58 +109,34 @@ module processor(
 	 wire[31:0] ovf_status,mux1_out, mux2_out;
 	 wire [31:0] rwd_mux;
 	 
-	// assign ALUop = q_imem[6:2];
 	 assign opcode = q_imem[31:27];
 	 assign Rs = q_imem[21:17];
 	 assign Rt = q_imem[16:12];
 	 assign Rd = q_imem[26:22];
-	// assign shamt = q_imem[11:7];
 	 assign imm = q_imem[16:0];
 	 
-	 //control signals
 	 control_unit cont1(.opcode(opcode), .Rdst(Rdst), .ALUinB(ALUinB), .Rwe(Rwe), .Rwd(Rwd), .DMwe(DMWe), .all_Rtype(all_Rtype), .ALUop(alu_op), .addi(addi), .add(add), .sub(sub));
-	// assign mux1_out = addi? 32'd2 : 32'd0;
-	// assign mux2_out = sub? 32'd3 : mux1_out;
+	
 	 assign ovf_status = all_Rtype ? (add) ? 32'd1 : 32'd3 : 32'd2;//(sub ? 32'd3 : 32'd0)) : 32'd2;
-	// or or_sig(sig, add, sub, addi);
-	// and and_sig(ovf,overflow,sig);
-//	assign ovf = overflow & (addi| sub | add);
-	 
+	
 	 assign alu_op = all_Rtype ? q_imem[6:2] : 5'b00000;
 	 assign shmt = all_Rtype ?  q_imem[11:7] : 5'b00000;
-	 //Register file
 	 assign ctrl_readRegA = Rs;
 	 assign ctrl_readRegB = Rdst ? Rd : Rt;
 	 assign ctrl_writeEnable = Rwe;
-	// assign ctrl_writeReg =  overflow ? 5'b1110 : Rd; 
 	 assign ctrl_writeReg = ((add | sub | addi) & overflow) ? 5'b11110 : Rd;
-  //  assign ctrl_writeReg = ((isR_add | isR_sub | addi) ? (overflow ? 5'b11110 : Rd) : Rd);
 
-	// assign ctrl_writeReg = Rd;
-	// assign rwd_mux = Rwd ? q_dmem : alu_out;
-	// assign data_writeReg = ovf ? ovf_status : rwd_mux;
-	 //assign data_writeReg = ovf ? ovf_status : (Rwd ? q_dmem : alu_out);
-    //assign data_writeReg = Rwd ? q_dmem : alu_out;
-	 
-	// assign alu_op = all_Rtype ? ALUop : 5'b0;
-	// assign alu_op = all_Rtype ? q_imem[6:2] : 5'b00000;
-	// assign shmt = all_Rtype ?  q_imem[11:7] : 5'b00000;
-	 
-	 //sign entension using the n replicator method
 	 wire[31:0] extend_imm;
 	 assign extend_imm[31:17] = {15{imm[16]}};
 	 assign extend_imm[16:0] = imm;
 	 
-	 //alu
 	 assign data_B = ALUinB ? extend_imm : data_readRegB;
 	 alu alu1(.data_operandA(data_readRegA), .data_operandB(data_B), .ctrl_ALUopcode(alu_op), .ctrl_shiftamt(shmt), .data_result(alu_out), .isNotEqual(isNotEqual), .isLessThan(isLessThan), .overflow(overflow));
 
-   //dmem
 	
    assign wren = DMWe;
 	assign data = data_readRegB;
 	assign address_dmem = alu_out[11:0];
-  // assign data_writeReg = Rwd ? q_dmem : alu_out;
 	
 	assign data_writeReg = ((add | sub | addi) & overflow) ? ovf_status : (Rwd ? q_dmem : alu_out);
 	
