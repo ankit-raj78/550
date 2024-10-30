@@ -45,3 +45,6 @@ Checkpoint 4 requirement for building a simple, single-cycle 32-bit processor us
   
 **Clock Configuration**  
    - Ensure that a 50 MHz clock signal is connected to the `skeleton` module.
+
+Refer the follwoing diagram for this:
+ ![Alt text](https://github.com/ankit-raj78/550/blob/main/diagram.jpeg)
