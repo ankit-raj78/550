@@ -15,19 +15,13 @@ Checkpoint 4 requirement for building a simple, single-cycle 32-bit processor us
 ### Main Files
 
 - **`alu.v`**  
-  Implements the Arithmetic Logic Unit (ALU), which performs core operations like addition, subtraction, bitwise AND, OR, shift left logical (sll), and shift right arithmetic (sra). Operates based on control signals.
+  Implements the Arithmetic Logic Unit (ALU), which performs core operations like addition, subtraction, bitwise AND, OR, shift left logical (sll), and shift right arithmetic (sra). Operates based on control signals. It also uses all the attached modules, like MUXes, CSA etc
 
 - **`clk_div.v` and `clk_div_by2.v`**  
   Clock divider modules that divide the main 50 MHz clock into various clock signals needed by different modules. They generate `imem_clock`, `dmem_clock`, `processor_clock`, and `regfile_clock` for synchronizing components.
 
 - **`control_unit.v`**  
   Generates control signals for various modules based on the instruction type and opcode, including memory access, ALU operations, and register writes. It ensures that each instruction type is processed correctly by the processor.
-
-- **`dmem.v`**  
-  Data Memory module providing a word-addressable (32-bit) memory space for loading and storing data. Static data begins at address 0, and stack data starts at address 2^16-1, growing downwards.
-
-- **`imem.v`**  
-  Instruction Memory module that stores the machine instructions to be executed by the processor. This module reads instructions from a memory initialization file (`.mif`), which can be populated by converting assembly code using the assembler provided.
 
 - **`processor.v`**  
   The main processor module that integrates the ALU, control unit, instruction memory, data memory, and register file. This module orchestrates the execution of instructions by coordinating data flow and control signals among all submodules.
