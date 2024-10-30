@@ -48,11 +48,6 @@ Checkpoint 4 requirement for building a simple, single-cycle 32-bit processor us
 - **Separate Instruction and Data Memory**: Allows for parallel access, improving instruction throughput and data handling efficiency.
 - **Exception Handling**: Overflow detection and status updates in `$r30` enable handling exceptions during arithmetic operations.
 
-## Configuration Instructions
-
-1. **Compilation and Simulation**  
-   - Use Quartus to compile the project with `skeleton.v` as the top-level entity.
-   - Initialize `imem` with a `.mif` file generated from assembly instructions to test processor functionality.
-   
-2. **Clock Configuration**  
+  
+**Clock Configuration**  
    - Ensure that a 50 MHz clock signal is connected to the `skeleton` module.
